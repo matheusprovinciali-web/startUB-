@@ -14,13 +14,13 @@
 
 ## Still outstanding
 
-- Create the Cognito User Pool and web app client in `eu-west-1`; provide User Pool ID, app client ID, exact callback/sign-out URLs, and MFA policy.
-- Implement and test the frontend authorization-code + PKCE sign-in, callback, logout, token storage, and refresh lifecycle.
-- Provision production secrets and configure deployed Cognito issuer/JWKS/client settings.
+- Create the Cognito User Pool and public web app client in `eu-west-1`; provide User Pool ID, app client ID, hosted UI domain, exact callback/sign-out URLs, and MFA policy.
+- Frontend Cognito Authorization Code + PKCE integration scaffold: sign-in redirect, callback handling, logout redirect, sessionStorage-backed OIDC state, access-token API helper, and silent-renew handling. Live Cognito sign-in remains unverified until a User Pool and app client exist.
+- Configure frontend NEXT_PUBLIC_COGNITO_ISSUER, NEXT_PUBLIC_COGNITO_CLIENT_ID, NEXT_PUBLIC_COGNITO_DOMAIN, NEXT_PUBLIC_APP_URL, and API base URL; configure matching API issuer/client/JWKS settings and exact CORS origins.
 - Create separate migration-owner and least-privilege runtime PostgreSQL roles and grant audited table privileges.
 - Run migrations against PostgreSQL and verify RLS with the real runtime role, including cross-tenant negative tests.
 - Add role/permission matrix and enforce it for each domain command.
-- Add token lifecycle/revocation strategy, rate limiting, CSRF/session decisions for browser integration, security headers, and production CORS origins.
+- Verify Cognito refresh-token behavior and rotation in the target User Pool; add token revocation strategy, rate limiting, security headers, and production CORS origins. Browser OIDC tokens are currently held in sessionStorage, so XSS prevention remains a release requirement.
 - Add tenant-scoped repositories and CRM/admissions endpoints, secure document storage, CI, integration tests, observability, backups, and deployment.
 
 ## Security caveat
