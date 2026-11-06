@@ -10,6 +10,7 @@ class Settings(BaseSettings):
     app_env: str = 'development'
     database_url: str | None = None
     auth_issuer: str | None = None
+    auth_client_id: str | None = None
     auth_audience: str | None = None
     auth_jwks_url: str | None = None
     cors_origins: list[str] = []
@@ -25,7 +26,7 @@ class Settings(BaseSettings):
 
     @property
     def auth_configured(self) -> bool:
-        return bool(self.auth_issuer and self.auth_audience and self.auth_jwks_url)
+        return bool(self.auth_issuer and self.auth_client_id and self.auth_jwks_url)
 
 
 @lru_cache
