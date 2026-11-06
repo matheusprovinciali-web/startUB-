@@ -11,15 +11,16 @@ StarUB Hub keeps **entrepreneurs**, **projects**, and **startups** as separate e
 - Frontend: Next.js, React, TypeScript (`apps/web`)
 - API: Python, FastAPI (`apps/api`)
 - Data: PostgreSQL (`database/migrations`)
+- Identity: Amazon Cognito User Pools (OIDC)
 - Initial architecture: modular monolith
 - API prefix: `/api/v1`
 
 ## Security-first development
 
-The API foundation validates OIDC access tokens against a configured JWKS endpoint, checks active tenant membership for every selected tenant, and sets transaction-local PostgreSQL RLS context. The runtime database role must be separate from the migration owner and must not bypass row-level security.
+The API foundation validates Amazon Cognito access tokens against the User Pool JWKS endpoint, enforces the configured app client ID and `token_use=access`, checks active tenant membership for every selected tenant, and sets transaction-local PostgreSQL RLS context. The runtime database role must be separate from the migration owner and must not bypass row-level security.
 
-See [docs/identity-and-tenancy.md](docs/identity-and-tenancy.md) before configuring local or hosted environments. Copy `apps/api/.env.example` to an untracked local `.env` and supply values from the chosen identity provider and database environment.
+See [docs/identity-and-tenancy.md](docs/identity-and-tenancy.md) for Cognito User Pool and app-client setup. Copy [apps/api/.env.example](apps/api/.env.example) to an untracked local `.env` and replace all placeholders with your Cognito and database deployment values.
 
 ## Development status
 
-This is an evolving development scaffold, not a deployed or production-ready service. The actual identity provider, secrets, database roles, migrations, integration tests, and deployment must be configured and verified before real data is processed. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/security.md](docs/security.md).
+This is an evolving development scaffold, not a deployed or production-ready service. Cognito code/configuration is selected, but the User Pool, app client, frontend sign-in flow, secrets, database roles, migrations, integration tests, and deployment must still be configured and verified before real data is processed. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/security.md](docs/security.md).
