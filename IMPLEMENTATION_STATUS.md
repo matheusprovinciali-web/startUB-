@@ -4,7 +4,7 @@
 
 - Next.js/React/TypeScript responsive workspace shell representing all 12 domains.
 - FastAPI service with liveness and dependency-aware readiness endpoints.
-- Amazon Cognito User Pools selected as the OIDC identity provider.
+- Amazon Cognito User Pools selected as the OIDC identity provider; AWS Region selected as `eu-west-1` (Europe/Ireland).
 - Cognito access-token verification using User Pool JWKS, RS256 signature validation, exact issuer, expiry, issued-at, subject, app-client `client_id`, and `token_use=access` checks.
 - Optional resource-server audience validation when Cognito tokens contain an `aud` claim and `AUTH_AUDIENCE` is configured.
 - Verified-subject tenant membership lookup; client-selected tenant IDs are checked against active memberships.
@@ -14,7 +14,7 @@
 
 ## Still outstanding
 
-- Create the Cognito User Pool and web app client; provide AWS Region, User Pool ID, app client ID, exact callback/sign-out URLs, and MFA policy.
+- Create the Cognito User Pool and web app client in `eu-west-1`; provide User Pool ID, app client ID, exact callback/sign-out URLs, and MFA policy.
 - Implement and test the frontend authorization-code + PKCE sign-in, callback, logout, token storage, and refresh lifecycle.
 - Provision production secrets and configure deployed Cognito issuer/JWKS/client settings.
 - Create separate migration-owner and least-privilege runtime PostgreSQL roles and grant audited table privileges.
