@@ -34,4 +34,4 @@ jobs:
       - name: Compile API modules
         run: python -m compileall -q app tests
       - name: Run unit tests
-        run: pytest -q
+        run: PYTHONPATH=. pytest -q
