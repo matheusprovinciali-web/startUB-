@@ -2,11 +2,11 @@
 
 ## Identity provider: Amazon Cognito
 
-StarUB Hub uses **Amazon Cognito User Pools** as its OIDC identity provider. The API accepts Cognito **access tokens** only; do not send ID tokens to API endpoints.
+StarUB Hub uses **Amazon Cognito User Pools** as its OIDC identity provider. The selected deployment Region is **Europe (Ireland), `eu-west-1`**. The API accepts Cognito **access tokens** only; do not send ID tokens to API endpoints.
 
 ### Required configuration
 
-Create a Cognito User Pool in the deployment's AWS Region, then create a separate app client for the StarUB Hub web application.
+Create a Cognito User Pool in `eu-west-1`, then create a separate app client for the StarUB Hub web application.
 
 Recommended web-client settings:
 - Use the authorization code grant with PKCE (no client secret in a browser-based public client).
@@ -19,7 +19,8 @@ Set these API environment variables from the selected User Pool and app client:
 
 | Variable | Value |
 |---|---|
-| `AUTH_ISSUER` | `https://cognito-idp.<region>.amazonaws.com/<user-pool-id>` |
+| `AWS_REGION` | `eu-west-1` |
+| `AUTH_ISSUER` | `https://cognito-idp.eu-west-1.amazonaws.com/<user-pool-id>` |
 | `AUTH_CLIENT_ID` | The web app client's ID; the API rejects tokens issued to another app client |
 | `AUTH_JWKS_URL` | `<AUTH_ISSUER>/.well-known/jwks.json` |
 | `AUTH_AUDIENCE` | Optional; set only if Cognito access tokens include and the API should enforce a resource-server `aud` claim |
@@ -58,6 +59,6 @@ Tenant roles currently defined in the core schema: owner, admin, manager, review
 
 ## Configuration
 
-Copy `apps/api/.env.example` to a local, untracked `.env` and replace every placeholder with the values from the deployed Cognito User Pool, app client, and database. `CORS_ORIGINS` must be a JSON array, for example `["http://localhost:3000"]`. Never commit AWS credentials, client secrets, signing keys, or database credentials.
+Copy `apps/api/.env.example` to a local, untracked `.env` and replace every placeholder with the values from the Cognito User Pool in `eu-west-1`, app client, and database. `CORS_ORIGINS` must be a JSON array, for example `["http://localhost:3000"]`. Never commit AWS credentials, client secrets, signing keys, or database credentials.
 
-The AWS account, Region, User Pool ID, app client ID, callback URLs, and production secrets have not yet been supplied or provisioned. Provider-specific code/configuration is now aligned to Cognito, but hosted sign-in is not live until those deployment values and the frontend OIDC flow are configured.
+The AWS account, User Pool ID, app client ID, callback URLs, and production secrets have not yet been supplied or provisioned. Provider code/configuration and the Region are selected, but hosted sign-in is not live until those deployment values and the frontend OIDC flow are configured.
