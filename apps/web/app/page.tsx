@@ -1,3 +1,5 @@
+import { AuthControls } from '../components/auth-controls';
+
 const modules = [
   ['01', 'Entrepreneur CRM & Admissions', 'Founder intake, applications, interviews and decisions'],
   ['02', 'Facilities & Hub Management', 'Seats, rooms, reservations and maintenance'],
@@ -24,11 +26,11 @@ export default function Home() {
       <div className="sidebar-foot"><span className="status-dot"/> Foundation workspace</div>
     </aside>
     <section className="content" id="overview">
-      <header className="topbar"><div><p className="eyebrow">INNOVATION HUB OPERATING SYSTEM</p><h1>Good morning.</h1><p className="muted">Your ecosystem, connected in one workspace.</p></div><div className="tenant-chip">STARUB · WORKSPACE</div></header>
+      <header className="topbar"><div><p className="eyebrow">INNOVATION HUB OPERATING SYSTEM</p><h1>Good morning.</h1><p className="muted">Your ecosystem, connected in one workspace.</p></div><AuthControls /></header>
       <section className="hero"><div><p className="eyebrow light">STARUB HUB PLATFORM</p><h2>Build what’s next.</h2><p>One connected environment for founders, startups, programs and the people who help them grow.</p><a className="hero-link" href="#modules">Explore the platform <span>↗</span></a></div><div className="hero-orbit"><div className="orbit orbit-one"/><div className="orbit orbit-two"/><div className="orbit-core">S</div></div></section>
       <div className="section-heading" id="modules"><div><p className="eyebrow">YOUR ECOSYSTEM</p><h2>Platform modules</h2></div><span className="muted">12 connected domains</span></div>
       <div className="module-grid">{modules.map(([n, title, desc]) => <article className="module-card" key={n}><span className="module-number">{n}</span><h3>{title}</h3><p>{desc}</p><span className="card-arrow">↗</span></article>)}</div>
-      <section className="roadmap" id="roadmap"><div><p className="eyebrow">DELIVERY STATUS</p><h2>Foundation first. Scale with confidence.</h2><p className="muted">This repository is at the initial scaffold stage. Authentication, tenant authorization, database migrations and the first CRM workflows are the next implementation milestones.</p></div><div className="roadmap-status"><span className="status-pill">IN FOUNDATION</span><strong>Phase 0</strong><span>Platform foundation</span><div className="progress"><i/></div></div></section>
+      <section className="roadmap" id="roadmap"><div><p className="eyebrow">DELIVERY STATUS</p><h2>Foundation first. Scale with confidence.</h2><p className="muted">This repository is at the initial scaffold stage. Cognito sign-in with PKCE is now wired into the frontend scaffold. Tenant-scoped data workflows and production identity configuration remain the next milestones.</p></div><div className="roadmap-status"><span className="status-pill">IN FOUNDATION</span><strong>Phase 0</strong><span>Platform foundation</span><div className="progress"><i/></div></div></section>
       <footer>STARUB HUB <span>·</span> Product foundation v0.1 · Not for production use</footer>
     </section>
   </main>;
