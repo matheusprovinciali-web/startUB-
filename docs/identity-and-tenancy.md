@@ -21,7 +21,8 @@ Tenant roles currently defined in the core schema: owner, admin, manager, review
 - Apply migrations with a dedicated schema-owner role.
 - Run the API with a separate least-privilege database role.
 - The API role must not be superuser, table owner, or have `BYPASSRLS`.
-- Grant only required table privileges. In particular, membership lookup is needed for the verified subject; do not expose tenant or membership tables through generic CRUD.
+- Use [the example runtime-role grants](../database/roles/runtime_role.example.sql) as a starting point, replacing the database name and reviewing grants against the deployed schema.
+- Provision the runtime role password separately through a secrets manager; never commit it.
 - Use TLS for remote PostgreSQL connections and store `DATABASE_URL` in a secrets manager.
 - Test cross-tenant reads and writes using the actual runtime database role before release.
 
@@ -35,4 +36,4 @@ Tenant roles currently defined in the core schema: owner, admin, manager, review
 
 ## Configuration
 
-Copy `apps/api/.env.example` to a local, untracked `.env` and replace all placeholders. Never commit real issuer secrets, client secrets, signing keys, or database credentials. OIDC provider-specific client setup and production secret provisioning remain deployment tasks.
+Copy `apps/api/.env.example` to a local, untracked `.env` and replace all placeholders. `CORS_ORIGINS` must be a JSON array, for example `["http://localhost:3000"]`. Never commit real issuer secrets, client secrets, signing keys, or database credentials. OIDC provider-specific client setup and production secret provisioning remain deployment tasks.
