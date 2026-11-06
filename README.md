@@ -11,7 +11,7 @@ StarUB Hub keeps **entrepreneurs**, **projects**, and **startups** as separate e
 - Frontend: Next.js, React, TypeScript (`apps/web`)
 - API: Python, FastAPI (`apps/api`)
 - Data: PostgreSQL (`database/migrations`)
-- Identity: Amazon Cognito User Pools (OIDC)
+- Identity: Amazon Cognito User Pools (OIDC), AWS Region `eu-west-1` (Europe/Ireland)
 - Initial architecture: modular monolith
 - API prefix: `/api/v1`
 
@@ -23,4 +23,4 @@ See [docs/identity-and-tenancy.md](docs/identity-and-tenancy.md) for Cognito Use
 
 ## Development status
 
-This is an evolving development scaffold, not a deployed or production-ready service. Cognito code/configuration is selected, but the User Pool, app client, frontend sign-in flow, secrets, database roles, migrations, integration tests, and deployment must still be configured and verified before real data is processed. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/security.md](docs/security.md).
+This is an evolving development scaffold, not a deployed or production-ready service. Cognito and the AWS Region are selected, but the User Pool, app client, frontend sign-in flow, secrets, database roles, migrations, integration tests, and deployment must still be configured and verified before real data is processed. See [IMPLEMENTATION_STATUS.md](IMPLEMENTATION_STATUS.md), [docs/architecture.md](docs/architecture.md), [docs/roadmap.md](docs/roadmap.md), and [docs/security.md](docs/security.md).
