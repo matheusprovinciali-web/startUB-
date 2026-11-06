@@ -1,23 +1,24 @@
-# Implementation status — initial increment
+# Implementation status — secure foundation increment
 
-## Added in this branch
+## Added in `develop`
 
-- Next.js/React/TypeScript web application shell with responsive StarUB Hub dashboard and all 12 domain modules represented.
-- FastAPI application with health and readiness endpoints and OpenAPI under the versioned API namespace.
-- PostgreSQL core migration for tenants, tenant memberships, entrepreneurs, projects, entrepreneur-project relationships, startups, and audit events.
-- Architecture, phased roadmap, and security baseline documentation.
+- Next.js/React/TypeScript responsive workspace shell representing all 12 domains.
+- FastAPI service with liveness and dependency-aware readiness endpoints.
+- OIDC access-token verification using provider JWKS, pinned RS256/ES256 algorithms, and issuer/audience/expiry/issued-at/subject validation.
+- Verified-subject tenant membership lookup; client-selected tenant IDs are checked against active memberships.
+- Transaction-local PostgreSQL tenant context and row-level security policies for entrepreneurs, projects, their relationship table, startups, and audit events.
+- Core schema for tenants, memberships, entrepreneurs, projects, startups, and audit events.
+- Environment template, identity/tenant deployment guidance, and initial fail-closed authentication tests.
 
-## Not implemented yet
+## Still outstanding
 
-- OIDC authentication, token validation, tenant membership authorization, role/permission enforcement, and session lifecycle.
-- Database connection/pool, migration runner, row-level security, tenant-scoped repositories, and CRUD endpoints.
-- Admissions intake, file storage/scanning, pitch-deck versioning, scoring workflow, interview scheduling, and human decision UI.
-- Automated tests, CI pipeline, deployment infrastructure, secrets, observability, backup/restore, and production configuration.
+- Select and configure the actual OIDC provider, register web/API clients, configure callback/logout URLs, MFA, and provision production secrets.
+- Create separate migration-owner and least-privilege runtime PostgreSQL roles and grant audited table privileges.
+- Run migrations against PostgreSQL and verify RLS with the real runtime role, including cross-tenant negative tests.
+- Add role/permission matrix and enforce it for each domain command.
+- Add token lifecycle/revocation strategy, rate limiting, CSRF/session decisions for browser integration, security headers, and production CORS origins.
+- Add tenant-scoped repositories and CRM/admissions endpoints, secure document storage, CI, integration tests, observability, backups, and deployment.
 
-## Security status
+## Security caveat
 
-The API currently exposes only operational placeholder endpoints and does not yet provide business-data access. Do not deploy it as a production application. The database migration is a starting schema, not a complete security configuration; tenant isolation must be enforced in authenticated application code and tested before any tenant data is stored.
-
-## Verification
-
-No dependency installation, build, database migration, integration test, or deployment has been run in this GitHub increment. Treat the code as an initial repository scaffold pending local CI verification.
+This is a meaningful security foundation, not a production security certification. No identity provider or database credentials have been supplied, and no database migration, live token verification, integration test, or deployment has been executed. Do not expose business-data endpoints or store real tenant data until the deployment role grants, RLS behavior, identity-provider configuration, and cross-tenant tests have been verified.
