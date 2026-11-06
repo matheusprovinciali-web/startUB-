@@ -19,7 +19,7 @@ StarUB Hub keeps **entrepreneurs**, **projects**, and **startups** as separate e
 
 The API foundation validates Amazon Cognito access tokens against the User Pool JWKS endpoint, enforces the configured app client ID and `token_use=access`, checks active tenant membership for every selected tenant, and sets transaction-local PostgreSQL RLS context. The runtime database role must be separate from the migration owner and must not bypass row-level security.
 
-See [docs/identity-and-tenancy.md](docs/identity-and-tenancy.md) for Cognito User Pool and app-client setup. Copy [apps/api/.env.example](apps/api/.env.example) to an untracked local `.env` and replace all placeholders with your Cognito and database deployment values.
+See [docs/identity-and-tenancy.md](docs/identity-and-tenancy.md) for Cognito User Pool and app-client setup, including the Next.js Authorization Code + PKCE flow. Copy [apps/api/.env.example](apps/api/.env.example) to an untracked local `.env` and [apps/web/.env.example](apps/web/.env.example) to `apps/web/.env.local`; replace placeholders with environment-specific Cognito and API values.
 
 ## Development status
 
