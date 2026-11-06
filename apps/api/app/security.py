@@ -35,7 +35,7 @@ def verify_access_token(token: str) -> dict[str, Any]:
         if not isinstance(claims.get('sub'), str) or not claims['sub'].strip():
             raise jwt.InvalidTokenError('Missing subject')
         return claims
-    except (jwt.PyJWTError, Exception) as exc:
+    except Exception as exc:
         # Do not leak signature, key lookup, or claim-validation details to clients.
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
