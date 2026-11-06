@@ -8,12 +8,12 @@ from jwt import PyJWKClient
 
 from app.settings import get_settings
 
-bearer_scheme = HTTPBearer(auto_error=False, scheme_name='OIDC Bearer Token')
+bearer_scheme = HTTPBearer(auto_error=False, scheme_name='Cognito Access Token')
 
 
 @lru_cache(maxsize=4)
 def _jwks_client(jwks_url: str) -> PyJWKClient:
-    # PyJWT caches JWKS keys and refreshes when an unknown key ID is encountered.
+    # Cognito publishes rotating RS256 signing keys through the user-pool JWKS endpoint.
     return PyJWKClient(jwks_url, cache_jwk_set=True, lifespan=300, timeout=5)
 
 
@@ -26,12 +26,21 @@ def verify_access_token(token: str) -> dict[str, Any]:
         claims = jwt.decode(
             token,
             signing_key.key,
-            algorithms=['RS256', 'ES256'],
-            audience=settings.auth_audience,
+            algorithms=['RS256'],
             issuer=settings.auth_issuer,
-            options={'require': ['exp', 'iat', 'sub', 'iss', 'aud']},
+            audience=settings.auth_audience,
+            options={
+                'require': ['exp', 'iat', 'sub', 'iss', 'client_id', 'token_use'],
+                'verify_aud': bool(settings.auth_audience),
+            },
             leeway=30,
         )
+        # Cognito access tokens identify the app client with client_id (not the
+        # ID-token aud claim) and distinguish themselves with token_use=access.
+        if claims.get('client_id') != settings.auth_client_id:
+            raise jwt.InvalidTokenError('Unexpected Cognito app client')
+        if claims.get('token_use') != 'access':
+            raise jwt.InvalidTokenError('Expected a Cognito access token')
         if not isinstance(claims.get('sub'), str) or not claims['sub'].strip():
             raise jwt.InvalidTokenError('Missing subject')
         return claims
