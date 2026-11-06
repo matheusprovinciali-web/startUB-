@@ -62,3 +62,24 @@ Tenant roles currently defined in the core schema: owner, admin, manager, review
 Copy `apps/api/.env.example` to a local, untracked `.env` and replace every placeholder with the values from the Cognito User Pool in `eu-west-1`, app client, and database. `CORS_ORIGINS` must be a JSON array, for example `["http://localhost:3000"]`. Never commit AWS credentials, client secrets, signing keys, or database credentials.
 
 The AWS account, User Pool ID, app client ID, callback URLs, and production secrets have not yet been supplied or provisioned. Provider code/configuration and the Region are selected, but hosted sign-in is not live until those deployment values and the frontend OIDC flow are configured.
+
+## Next.js frontend: Authorization Code + PKCE
+
+The apps/web frontend uses oidc-client-ts as a browser-based public OIDC client. It does not use or require a Cognito app-client secret.
+
+1. Create a Cognito app client with no client secret and enable the authorization code grant. PKCE (S256) is used by the OIDC client; do not enable implicit grant.
+2. Configure the Cognito managed-login domain.
+3. Add these exact callback URLs to the app client:
+   - Local callback: http://localhost:3000/auth/callback
+   - Local sign-out URL: http://localhost:3000/auth/signed-out
+   - Add the corresponding exact HTTPS URLs for each deployed environment.
+4. Enable the OIDC scopes openid, email, and profile. Do not add a client secret to frontend configuration.
+5. Copy apps/web/.env.example to apps/web/.env.local and replace the placeholders. Set NEXT_PUBLIC_APP_URL to the exact frontend origin and NEXT_PUBLIC_API_BASE_URL to the FastAPI origin.
+6. Add the frontend origin to the API's CORS_ORIGINS JSON array. Keep the production list restricted to the deployed frontend origins.
+7. Install dependencies and start the web app from apps/web with npm install and npm run dev.
+
+The frontend requests an authorization code, uses the library's S256 PKCE verifier/challenge and state handling, then processes the callback at /auth/callback. Access tokens are sent as Bearer tokens by apps/web/lib/api.ts; tenant selection, when needed, is sent separately as X-Tenant-ID. The API remains responsible for validating the Cognito access token and tenant membership.
+
+OIDC user state and protocol transaction state are stored in sessionStorage, not localStorage, and are scoped to the browser tab. This is a browser SPA integration, not an HttpOnly server-side session. Any successful XSS could still access browser-held tokens: enforce a restrictive Content Security Policy, avoid unsafe HTML, keep dependencies patched, and complete a security review before production. The configured silent-renew path depends on Cognito issuing a refresh token and must be verified with the real app client and refresh-token rotation settings. If refresh fails, the UI returns to an unauthenticated state and the user must sign in again.
+
+The current scaffold provides sign-in controls and a reusable authenticated API fetch helper; it does not yet gate every dashboard route or implement the tenant-selection UI. Do not treat the static dashboard shell as proof that a user is authenticated.
